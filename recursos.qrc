@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/texturas">
+        <file>plaga.png</file>
+        <file>izq.png</file>
+        <file>abajo.png</file>
+        <file>arr.png</file>
+        <file>der.png</file>
+        <file>proy.png</file>
+    </qresource>
+</RCC>

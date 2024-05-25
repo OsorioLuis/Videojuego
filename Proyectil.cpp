@@ -5,10 +5,11 @@
 #include <QList>
 #include "Enemigo.h"
 
-Proyectil::Proyectil(){
+Proyectil::Proyectil(QPointF &direccion): direccion(direccion), velocidad(5){
 
     //posicion inicial y tamaño
-    setRect(0, 0, 5, 25);
+    proy.load(":/texturas/proy.png");
+    setPixmap(proy);
     //conectar a slot
     QTimer *tiempo = new QTimer();
     connect(tiempo, SIGNAL(timeout()), this, SLOT(moverseUP()));
@@ -32,9 +33,9 @@ void Proyectil::moverseUP()
     }
 
     //movimiento del proyectil
-    setPos(x(), y()-10);
+    setPos(x() + direccion.x() * velocidad, y() + direccion.y() * velocidad);
     //se elimina cuando este en la posicion 0 respectiva a la escena
-    if(pos().y() + rect().height() < 0){
+    if(pos().y() + pixmap().height() < 0){
         scene()->removeItem(this);
         delete this; //hace referencia al mismo objeto que se le pasa a la señal en el constructor
         qDebug() << "item eliminado";

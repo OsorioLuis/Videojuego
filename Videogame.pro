@@ -10,12 +10,14 @@ CONFIG += c++17
 
 SOURCES += \
     Enemigo.cpp \
+    Juego.cpp \
     Personaje.cpp \
     Proyectil.cpp \
     main.cpp
 
 HEADERS += \
     Enemigo.h \
+    Juego.h \
     Personaje.h \
     Proyectil.h
 
@@ -25,3 +27,6 @@ FORMS +=
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    recursos.qrc
