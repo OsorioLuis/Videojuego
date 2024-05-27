@@ -13,13 +13,15 @@ SOURCES += \
     Juego.cpp \
     Personaje.cpp \
     Proyectil.cpp \
+    Puntuacion.cpp \
     main.cpp
 
 HEADERS += \
     Enemigo.h \
     Juego.h \
     Personaje.h \
-    Proyectil.h
+    Proyectil.h \
+    Puntuacion.h
 
 FORMS +=
 

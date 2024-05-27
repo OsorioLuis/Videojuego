@@ -3,15 +3,26 @@
 #include <QGraphicsScene>
 #include <QList>
 #include <QRandomGenerator>
+#include <QGraphicsPixmapItem>
 
-Enemigo::Enemigo(Personaje *objetivo) : QGraphicsRectItem(), objetivo(objetivo){
+Enemigo::Enemigo(int nivel, Personaje *objetivo) : QGraphicsPixmapItem(), objetivo(objetivo){
     //en el constructor se paso la inicializacion del miembro objetivo
     //generacion de posicion aleatoria
     int aleatX = QRandomGenerator::global()->bounded(800 + 200);
     int aleatY = QRandomGenerator::global()->bounded(600 + 200);
     setPos(aleatX, aleatY);
 
-    setRect(0, 0, 40, 40);//dimensiones de hitbox
+    generico.load(":/texturas/enemigo.png");
+    QPixmap scaled_generico = generico.scaled(60, 70);
+    setPixmap(scaled_generico);
+
+    //establecer dificultad de enemigo
+    if(nivel == 1){
+        nivelActual = 1;
+    }else if(nivel == 2){
+        nivelActual = 2;
+    }
+    //para el manejo de impactos
 
     //uso de slots para el movimiento del enemigo
     tiempo = new QTimer(this);
@@ -40,4 +51,14 @@ void Enemigo::moverEnemigo(){
         qreal movimientoY = (direccionY / distancia) * velocidad;
         setPos(x() + movimientoX, y() + movimientoY);
     }
+}
+
+void Enemigo::recibirImpacto(){
+    cuentaImpact++;
+    if(cuentaImpact == nivelActual){
+        juego->ptsJugador->aumentarPuntuacion();
+        scene()->removeItem(this);
+        delete this;
+    }
+
 }

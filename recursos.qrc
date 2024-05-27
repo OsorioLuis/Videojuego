@@ -6,5 +6,7 @@
         <file>arr.png</file>
         <file>der.png</file>
         <file>proy.png</file>
+        <file>back.png</file>
+        <file>enemigo.png</file>
     </qresource>
 </RCC>

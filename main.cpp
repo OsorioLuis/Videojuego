@@ -17,13 +17,13 @@
  * QDebug (mostrar mensajes en consola)
  *
 */
-
+Juego *juego;
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Juego juego;
-    juego.show();
+    juego = new Juego(); //la clase juegoe es global para que otras clases accedan a este
+    juego->show();
 
     return a.exec();
 }

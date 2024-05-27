@@ -4,6 +4,10 @@
 #include <QGraphicsRectItem>
 #include <QObject>
 #include <QGraphicsPixmapItem>
+#include "Juego.h"
+
+//para acceder a puntuacion
+extern Juego *juego; //objeto global juego
 
 class Proyectil: public QObject, public QGraphicsPixmapItem{
     //macro
@@ -11,12 +15,12 @@ class Proyectil: public QObject, public QGraphicsPixmapItem{
 public:
     Proyectil(QPointF &direccion); //constructor, se establece la direccion que tomará el proyectil
     //uso de señales y slots
+    QPixmap getProyectil();
 public slots: //es una funcion que puede ser asigana a una señal
-    void moverseUP();
+    void colisiones();
 private:
     QPointF direccion;
     qreal velocidad;
-
     //texturas
     QPixmap proy;
 };
