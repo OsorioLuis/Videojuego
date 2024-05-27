@@ -6,7 +6,7 @@
 #include "Enemigo.h"
 
 
-Proyectil::Proyectil(QPointF &direccion): direccion(direccion), velocidad(5){
+Proyectil::Proyectil(Personaje *personaje, QPointF &direccion): direccion(direccion), velocidad(5), personaje(personaje){
 
     //posicion inicial y tamaño
     proy.load(":/texturas/proy.png");
@@ -33,6 +33,7 @@ void Proyectil::colisiones(){
                 //la puntuacion se maneja en este metodo
                 enemigo->recibirImpacto();
                 //scene()->removeItem(this);
+                personaje->aumentarPuntuacion(5);
                 delete this;
                 return; //necesario para las lineas siguientes
             }

@@ -7,8 +7,11 @@
 #include <QList>
 #include <QGraphicsPixmapItem>
 #include <QImage>
+#include <QMessageBox>
+#include <QDebug>
 
-Juego::Juego(QWidget * parent) : QGraphicsView(parent){
+Juego::Juego(QWidget * parent) : QGraphicsView(parent), puntuacionObjetivo(50){
+
     //creacion de la escena
     //jerarquia de codigo
     escena = new QGraphicsScene();
@@ -17,6 +20,13 @@ Juego::Juego(QWidget * parent) : QGraphicsView(parent){
 
     //imagen muerte
     muerte = new QGraphicsPixmapItem;
+    QPixmap imagen(":/texturas/muerte.png");
+    QSize tamanioVentana = size();
+    imagen = imagen.scaled(tamanioVentana, Qt::KeepAspectRatio);
+    muerte->setPixmap(imagen);
+    muerte->setPos(500,500);
+    muerte->setVisible(false);
+    escena->addItem(muerte);
 
     //configuracion de escenas
     setScene(escena);
@@ -31,7 +41,7 @@ Juego::Juego(QWidget * parent) : QGraphicsView(parent){
 
 
     //establecer valores para aumentar dificultad
-    establecerNivel(2);
+    establecerNivel(1);
     //añadir nuevo poder en el nivel 3...
 
     //creacion textos
@@ -43,14 +53,27 @@ Juego::Juego(QWidget * parent) : QGraphicsView(parent){
     nivelJuego->setDefaultTextColor(Qt::white);
     nivelJuego->setFont(QFont("times", 24));
     nivelJuego->setPos(742, 60);
+
     //vida
     vidaTexto->setPlainText(QString("Vida:%1 | ").arg(personaje->getVida()));
     vidaTexto->setDefaultTextColor(Qt::white);
     vidaTexto->setFont(QFont("times", 15, 1, true));
     vidaTexto->setPos(70, 55);
+
     //puntuacion
-    ptsJugador = new Puntuacion();
-    ptsJugador->setPos(150, 55);
+    ptsJugador = new QGraphicsTextItem();
+    ptsJugador->setPlainText(QString("Eliminados: %1").arg(personaje->getPuntacion()));
+    ptsJugador->setDefaultTextColor(Qt::white);
+    ptsJugador->setFont(QFont("times", 15, 1, true));
+    ptsJugador->setPos(160, 55);
+
+    //mensaje puntuacion objetivo lograda
+    mensajeNivel = new QGraphicsTextItem();
+    mensajeNivel->setDefaultTextColor(Qt::yellow);
+    mensajeNivel->setFont(QFont("Arial", 24));
+    mensajeNivel->setPos(600, 400);
+    mensajeNivel->setVisible(false);  // Inicialmente no visible
+    escena->addItem(mensajeNivel);
 
     escena->addItem(ptsJugador);
     escena->addItem(nivelJuego);
@@ -59,6 +82,9 @@ Juego::Juego(QWidget * parent) : QGraphicsView(parent){
     //slots para cambio de vida
     //hacemos la conexion entre la señal vidaCambiada y actualizarVida
     connect(personaje, &Personaje::vidaCambiada, this, &Juego::actualizarVida);
+    connect(personaje, &Personaje::cambioPuntuacion, this, &Juego::actualizarPuntuacion);
+
+
     //player focusable
     personaje->setFlag(QGraphicsItem::ItemIsFocusable);
     personaje->setFocus();
@@ -74,13 +100,44 @@ Juego::Juego(QWidget * parent) : QGraphicsView(parent){
     connect(tiempo, &QTimer::timeout, this, &Juego::crearEnemigo);
     tiempo->start(600); //cambiando este dato podemos definir dificultad
 
+    connect(personaje, &Personaje::muerte, this, &Juego::mostrarImagenMuerte);
+
 }
 void Juego::establecerNivel(int nivel){
     nivelActual = nivel;
 }
 
+void Juego::verificarPuntuacion(){
+    if (personaje->getPuntacion() >= puntuacionObjetivo) {
+        nivel++;
+        puntuacionObjetivo *= 2;
+        nivelJuego->setPlainText(QString("Nivel: %1").arg(nivel));
+
+        mensajeNivel->setPlainText(QString("Has pasado al nivel %1").arg(nivel));
+        mensajeNivel->setVisible(true);
+
+        //temporizador para ocultar mensaje luego de 2 segundos
+        QTimer::singleShot(3000, [this](){
+            mensajeNivel->setVisible(false);
+        });
+    }
+}
+
+void Juego::actualizarPuntuacion(int nuevaPts){
+    ptsJugador->setPlainText(QString("Eliminados: %1").arg(nuevaPts));
+    verificarPuntuacion();
+}
+
 void Juego::actualizarVida(int nuevaVida){
     vidaTexto->setPlainText(QString("Vida:%1 | ").arg(nuevaVida));
+
+}
+
+void Juego::mostrarImagenMuerte(){
+    muerte->setVisible(true);
+    tiempo->stop();
+    setFocusPolicy(Qt::NoFocus);
+    //aqui irá el retorno al menu del juego
 }
 
 void Juego::crearEnemigo(){
@@ -94,3 +151,6 @@ void Juego::crearEnemigo(){
     escena->addItem(enemigo);
 }
 
+
+//nota para la creacion de niveles podemos usar todo lo que está en el constructor en metodos donde
+//se modifiquen los parametros respectivos

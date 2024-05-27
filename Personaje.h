@@ -19,8 +19,7 @@ public:
     void reducirVida(int cantidad);
     int getVida() const;
     int getPuntacion() const;
-    void aumentarPuntuacion(int puntos);
-    void personajeMuerto();
+    void aumentarPuntuacion(int cantidad);
 
 public slots:
     void manejoColision();
@@ -30,6 +29,7 @@ signals: //de esta forma podemos comunicar cambios de estado a otras partes del 
     //acceso el uno del otro reduciendo sus dependencias
     void muerte();
     void vidaCambiada(int nuevaVida); //esto se envierá a la clase jeugo para mostrar en pantalla la vida
+    void cambioPuntuacion(int nueva);
 
 protected:
     void keyPressEvent(QKeyEvent * event) override;

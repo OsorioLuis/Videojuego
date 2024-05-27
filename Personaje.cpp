@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QKeyEvent>
 
-Personaje::Personaje() : vida(70), puntuacion(0){
+Personaje::Personaje() : vida(100), puntuacion(0){
     //slot para frecuencia de actualizacion de movimiento
     tempo = new QTimer(this);
     connect(tempo, &QTimer::timeout, this, &Personaje::actualizarPosicion);
@@ -54,8 +54,9 @@ int Personaje::getVida() const{
 int Personaje::getPuntacion() const{
     return puntuacion;
 }
-void Personaje::aumentarPuntuacion(int puntos){
-    puntuacion += puntos; //se sumara segun la cantidad de enemigos que elimine
+void Personaje::aumentarPuntuacion(int cantidad){
+    puntuacion += cantidad; //se sumara segun la cantidad de enemigos que elimine
+    emit cambioPuntuacion(puntuacion);
 }
 
 
@@ -125,7 +126,7 @@ QPointF Personaje::getDireccion(){
 }
 
 void Personaje::disparar(){
-    Proyectil *proyectil = new Proyectil(direccion);
+    Proyectil *proyectil = new Proyectil(this, direccion);
     //tenemos que añadirlo a la escena
     //posicion del proyectil
     proyectil->setPos(x() + pixmap().width() / 3, y() + pixmap().height() / 3);

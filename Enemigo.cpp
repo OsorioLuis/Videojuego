@@ -56,7 +56,7 @@ void Enemigo::moverEnemigo(){
 void Enemigo::recibirImpacto(){
     cuentaImpact++;
     if(cuentaImpact == nivelActual){
-        juego->ptsJugador->aumentarPuntuacion();
+        emit eliminado(); //es una señal que va junto con la señal de cambio puntuacion
         scene()->removeItem(this);
         delete this;
     }

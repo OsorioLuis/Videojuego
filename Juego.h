@@ -7,7 +7,6 @@
 #include <QGraphicsScene>
 #include <QObject>
 #include "Personaje.h"
-#include "Puntuacion.h"
 
 class Juego: public QGraphicsView{
     Q_OBJECT
@@ -17,10 +16,12 @@ public:
     //setters de dificultad
     void establecerNivel(int nivel);
     int getNivelActual();
-    Puntuacion *ptsJugador;
+
+    void verificarPuntuacion();
 public slots:
     void crearEnemigo();
     void actualizarVida(int nuevaVida);
+    void actualizarPuntuacion(int nuevaPts);
     void mostrarImagenMuerte();
 private:
     QGraphicsScene * escena;
@@ -28,11 +29,14 @@ private:
     QTimer *tiempo;
     QGraphicsTextItem *vidaTexto;
     QGraphicsTextItem *nivelJuego;
-
+    QGraphicsTextItem *ptsJugador;
     //imagen muerte
     QGraphicsPixmapItem *muerte;
 
     //datos para definir dificultad
+    int nivel;
+    int puntuacionObjetivo;
+    QGraphicsTextItem *mensajeNivel;
     int nivelActual;
     //luego se instanciaran los respectivos datos de ataque, vida etc
 };
