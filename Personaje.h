@@ -12,7 +12,8 @@ class Personaje: public QObject, public QGraphicsPixmapItem{
     Q_OBJECT //necesario para usar slots
 public:
     Personaje();
-    QPointF getDireccion(); //se usará para saber la direccion del personaje
+    QPointF getDireccion();
+    QString direccionApuntado();    //se usará para saber la direccion del personaje
 
     //metodos de personaje
     void disparar();
@@ -42,6 +43,7 @@ private:
     QTimer *tempo;
 
     QPointF direccion;
+    QString direccionActual; //para la construccion de imagenes
     qreal velocidad;
     bool arriba = false;
     bool abajo = false;
@@ -58,9 +60,9 @@ private:
     QPixmap izq;
     QPixmap abj;
     QPixmap arr;
+    QPixmap ataqueImg;
 
-    //texturas proyectil
-    QPixmap proy;
+
 };
 
 #endif // PERSONAJE_H

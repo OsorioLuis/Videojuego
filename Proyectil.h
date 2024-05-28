@@ -4,11 +4,7 @@
 #include <QGraphicsRectItem>
 #include <QObject>
 #include <QGraphicsPixmapItem>
-#include "Juego.h"
 #include "Personaje.h"
-
-//para acceder a puntuacion
-extern Juego *juego; //objeto global juego
 
 class Proyectil: public QObject, public QGraphicsPixmapItem{
     //macro
@@ -19,12 +15,19 @@ public:
     QPixmap getProyectil();
 public slots: //es una funcion que puede ser asigana a una señal
     void colisiones();
+    void actualizarImagen(const QString &direccion);
+
 private:
     QPointF direccion;
     qreal velocidad;
     Personaje *personaje;
-    //texturas
+
+    //texturas proyectil
     QPixmap proy;
+    QPixmap proy_der;
+    QPixmap proy_izq;
+    QPixmap proy_abj;
+    QPixmap proy_arr;
 };
 
 #endif // PROYECTIL_H

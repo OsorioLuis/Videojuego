@@ -6,6 +6,8 @@
 #include <QKeyEvent>
 
 Personaje::Personaje() : vida(100), puntuacion(0){
+    ataqueImg.load(":/texturas/ataque.png");
+
     //slot para frecuencia de actualizacion de movimiento
     tempo = new QTimer(this);
     connect(tempo, &QTimer::timeout, this, &Personaje::actualizarPosicion);
@@ -20,7 +22,7 @@ Personaje::Personaje() : vida(100), puntuacion(0){
     direccion = QPointF(0, -1); //hacia arriba
 
     normal.load(":/texturas/plaga.png");
-    QPixmap scaled = normal.scaled(110,100);
+    QPixmap scaled = normal.scaled(100,100);
 
     setPixmap(scaled);
 }
@@ -62,24 +64,23 @@ void Personaje::aumentarPuntuacion(int cantidad){
 
 void Personaje::keyPressEvent(QKeyEvent *event)
 {
-    //para la sobreescritura de las teclas
-
     //para la deteccion de la direccion a la que apunta personaje
     switch(event->key()){
         case Qt::Key_W:
             arriba = true;
+            direccionActual = "W";
             break;
         case Qt::Key_S:
             abajo = true;
-
+            direccionActual = "S";
             break;
         case Qt::Key_A:
             izquierda = true;
-
+            direccionActual = "A";
             break;
         case Qt::Key_D:
             derecha = true;
-
+            direccionActual = "D";
             break;
         default:
             break;
@@ -88,6 +89,8 @@ void Personaje::keyPressEvent(QKeyEvent *event)
     //se registra la direccion
     direccion = QPointF(derecha - izquierda, abajo - arriba);
     if (event->key() == Qt::Key_W || event->key() == Qt::Key_S || event->key() == Qt::Key_A || event->key() == Qt::Key_D) {
+        QPixmap scaled_atq = ataqueImg.scaled(100,100);
+        setPixmap(scaled_atq);
         disparar();
     }
     teclas.insert(event->key());
@@ -98,16 +101,19 @@ void Personaje::keyReleaseEvent(QKeyEvent *event){
     switch(event->key()){
     case Qt::Key_W:
         arriba = false;
+        direccionActual = "W";
         break;
     case Qt::Key_S:
         abajo = false;
+        direccionActual = "S";
         break;
     case Qt::Key_A:
         izquierda = false;
-
+        direccionActual = "A";
         break;
     case Qt::Key_D:
         derecha = false;
+        direccionActual = "D";
         break;
     default:
         break;
@@ -117,7 +123,7 @@ void Personaje::keyReleaseEvent(QKeyEvent *event){
     direccion = QPointF(derecha - izquierda, abajo - arriba);
     teclas.remove(event->key());
     //cuando se deja de presionar la tecla
-    QPixmap scaled = normal.scaled(110,100);
+    QPixmap scaled = normal.scaled(100,100);
     setPixmap(scaled);
 }
 
@@ -125,23 +131,28 @@ QPointF Personaje::getDireccion(){
     return direccion;
 }
 
+QString Personaje::direccionApuntado(){
+    return direccionActual;
+}
+
 void Personaje::disparar(){
     Proyectil *proyectil = new Proyectil(this, direccion);
-    //tenemos que añadirlo a la escena
+    //se pasa la direccion donde apunta jugador para determinar que imagen se pone al proyectil
+    proyectil->actualizarImagen(direccionActual);
     //posicion del proyectil
-    proyectil->setPos(x() + pixmap().width() / 3, y() + pixmap().height() / 3);
+    proyectil->setPos(x() + pixmap().width() / 4, y() + pixmap().height() / 4);
     scene()->addItem(proyectil);
 }
 
 void Personaje::actualizarPosicion(){
     izq.load(":/texturas/izq.png");
-    QPixmap scaled_izq = izq.scaled(110,100);
+    QPixmap scaled_izq = izq.scaled(100,90);
     abj.load(":/texturas/abajo.png");
-    QPixmap scaled_abj = abj.scaled(110,100);
+    QPixmap scaled_abj = abj.scaled(100,90);
     arr.load(":/texturas/arr.png");
-    QPixmap scaled_arr = arr.scaled(110,100);
+    QPixmap scaled_arr = arr.scaled(100,90);
     der.load(":/texturas/der.png");
-    QPixmap scaled_der = der.scaled(110,100);
+    QPixmap scaled_der = der.scaled(100,90);
 
 
     int movimientoX = 0, movimientoY = 0;

@@ -9,5 +9,9 @@
         <file>back.png</file>
         <file>enemigo.png</file>
         <file>muerte.png</file>
+        <file>ataque.png</file>
+        <file>proy_abj.png</file>
+        <file>proy_arr.png</file>
+        <file>proy_der.png</file>
     </qresource>
 </RCC>

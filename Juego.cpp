@@ -109,11 +109,11 @@ void Juego::establecerNivel(int nivel){
 
 void Juego::verificarPuntuacion(){
     if (personaje->getPuntacion() >= puntuacionObjetivo) {
-        nivel++;
+        nivelActual++;
         puntuacionObjetivo *= 2;
-        nivelJuego->setPlainText(QString("Nivel: %1").arg(nivel));
+        nivelJuego->setPlainText(QString("Nivel: %1").arg(nivelActual));
 
-        mensajeNivel->setPlainText(QString("Has pasado al nivel %1").arg(nivel));
+        mensajeNivel->setPlainText(QString("Has pasado al nivel %1").arg(nivelActual));
         mensajeNivel->setVisible(true);
 
         //temporizador para ocultar mensaje luego de 2 segundos

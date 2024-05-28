@@ -13,7 +13,7 @@ Enemigo::Enemigo(int nivel, Personaje *objetivo) : QGraphicsPixmapItem(), objeti
     setPos(aleatX, aleatY);
 
     generico.load(":/texturas/enemigo.png");
-    QPixmap scaled_generico = generico.scaled(60, 70);
+    QPixmap scaled_generico = generico.scaled(70, 70);
     setPixmap(scaled_generico);
 
     //establecer dificultad de enemigo
